@@ -12,7 +12,6 @@
 
 
 
-
 Функционал:
 
 
@@ -181,7 +180,7 @@ login(self): вход в аккаунт.
 
 logout(self): выход из аккаунта.
 
-
+ def _encrypt_password(self, password): шифрование
 
 
 
