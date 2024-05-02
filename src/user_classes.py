@@ -18,8 +18,8 @@ class Account:
         
     
     
-    
-    def encrypt_password(self,password: str) -> str:
+    @staticmethod
+    def encrypt_password(password: str) -> str:
         hash_object = hashlib.sha256()
 
         hash_object.update(password.encode('utf-8'))
@@ -36,11 +36,11 @@ class User:
     user_id:int = 1
     is_logged_in:bool = False
 
-    def __init__(self, preferences=None):
+    def __init__(self, username:str, password:str,email:str ,preferences=None):
         self.user_id = User.user_id
         User.user_id += 1
         self.preferences:list=preferences
-        self.account=Account()
+        self.account=Account(username,password,email)
         self.watched_movies:list = []
         self.comments:list = []
         

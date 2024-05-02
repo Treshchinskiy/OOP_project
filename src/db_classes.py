@@ -1,34 +1,7 @@
 
 import mysql.connector
+import re
 
-
-'''
-CREATE DEFINER=`root`@`localhost` PROCEDURE `select_all`()
-BEGIN
-
-   SELECT * FROM users;
-
-END
-
-вот создание простой stored proccedure
-
-и потом в коде написать call select_all - и тогда она вызовется
-
-drop procedure select_all - чтобы удалить
-
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `find_by_name`(IN name_find varchar(200))
-BEGIN
-	select * 
-    from users
-    Where name = name_find;
-
-END
-
-вот эта с параметром нужно задать IN имя любое и тип переменной
-и затем при вызове
-call find_by_name('vlad') - например
-'''
 
 
 class UserDatabase:
@@ -82,33 +55,88 @@ class UserDatabase:
         
     
 
-    def  delete_user(self, username):
+    def  delete_user(self, username:str):
         cursor=self.connection.cursor()
         cursor.closer()
 
         
     
-    def get_user_by_name(self, username)->list[str]:
+    def get_user_by_name(self, username: str) -> list:
         try:
             cursor = self.connection.cursor()
-            query = "CALL get_user_by_username('{}')".format(username)  # Добавляем кавычки вокруг username
-            cursor.execute(query)
-            result = cursor.fetchall()
+            
+            cursor.callproc('get_user_by_username', [username])
+            
+            for result in cursor.stored_results():
+                rows = result.fetchall()
+                
             cursor.close()
-            if result == []:
-                print('User not found')                
-                return None
-            return result
+            return rows
+        except mysql.connector.Error as e:
+            print("Error occurred:", e)
+            return None
+        
+    def check_exist_user(self, username: str,email:str) -> bool:
+        try:
+            cursor = self.connection.cursor()
+            
+            cursor.callproc('check_exist_user',[username,email])
+            
+            for result in cursor.stored_results():
+                rows = result.fetchall()
+                
+                
+            cursor.close()
+            
+            return bool(rows[0][0]) 
+        
+        except Exception as e:
+            print(e)
+            print("Error occurred")
+            return None
+
+    def check_login_validation(self,password:str,email:str)->bool:
+        try:
+            cursor=self.connection.cursor()
+            
+            cursor.callproc('check_login_validation',[password, email])
+            
+            for result in cursor.stored_results():
+                rows=result.fetchall()
+            print(rows)
+            
+            
+            return bool(rows[0][0])
+        
         except Exception as e:
             print(e)
             print("Error occurred")
             return None
         
+        
+    @staticmethod
+    def is_strong_password(password):
+        if len(password) < 8:
+            return False
+        
+        has_lower = re.search(r'[a-z]', password)
+        has_upper = re.search(r'[A-Z]', password)
+        
+        
+        if has_lower and has_upper:
+            return True
+        else:
+            return False
 
 
 
-a=UserDatabase('localhost','root','1474747vd','oop_project_userinfo')
-print(a.get_user_by_name('vlad1'))
+if __name__ == '__main__':
+    a=UserDatabase('localhost','root','1474747vd','oop_project_userinfo')
+    print(a.check_exist_user('flo1','vlad.treshchindkiy.03@mail.ru'))
+    print(a.check_exist_user('vlad1','q'))
+
+    
+
 
 
 
