@@ -42,7 +42,7 @@ class User:
         self.preferences:list=preferences
         self.account=Account(username,password,email)
         self.watched_movies:list = []
-        self.comments:list = []
+        self.comments:list = {}
         
         
     

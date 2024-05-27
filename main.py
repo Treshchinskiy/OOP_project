@@ -7,11 +7,19 @@ from flask import Flask,render_template, request,redirect
 #rake_nltk
 
 
+'''
+как во flask приложении сделать так чтобы пользователь который зашел в систему 
+сохранился и чтобы мы дальше могли обращаться к нему в функциях
+'''
+
 Users_db = db_classes.UserDatabase('localhost','root','1474747vd','oop_project_userinfo')
 
 
 
 app=Flask(__name__)
+app.secret_key = 'ILIFIA80'
+
+
 
 @app.route('/home')
 def home():
