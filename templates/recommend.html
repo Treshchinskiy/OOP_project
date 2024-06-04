@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Movie Page{% endblock %}
+
+
+{% block content %}
+
+<h1>Movie Recommendation</h1>
+    <form action="/recommend" method="POST">
+        <label for="user_query">Enter your movie preference:</label><br>
+        <input type="text" id="user_query" name="user_query"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+    <h2>Recommended Movie:</h2>
+    <p>Title: {{ recommended_movie_title }}</p>
+    <p>Overview:{{ recommended_movie_overview }}</p>
+
+{% endblock %}

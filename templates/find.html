@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Find a Movie
+{% endblock %}
+
+
+{% block content %}
+    <h1>Find Similar Movies</h1>
+    <form action="/find" method="POST">
+        <label for="description">Enter movie description:</label><br>
+        <textarea id="description" name="description" rows="4" cols="50"></textarea><br>
+        <input type="submit" value="Find">
+    </form>
+
+    <h2>Recommended Movies:</h2>
+    <div id="recommended_movies">
+        <ul>
+            {% for movie in movies %}
+                <li>
+                    <h3>{{ movie.title }}</h3>
+                    <p>{{ movie.overview }}</p>
+                    
+                    <!-- Вывод списка похожих фильмов для каждого фильма -->
+                    <ul>
+                        {% for similar_movie in movie.similar_movies %}
+                            <li>
+                                <h4>{{ similar_movie.title }}</h4>
+                                <p>{{ similar_movie.overview }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

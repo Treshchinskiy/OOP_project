@@ -5,9 +5,17 @@
 {% block content %}
 
 
+    <div class="px-6 py-6">
+        <div class="search-container flex justify-center my-10">
+            <form action="/search" method="GET" class="w-1/2 flex">
+                <div class="input-container flex-grow">
+                    <input type="search" name="q" placeholder="Search..." class="w-full p-4 text-lg border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+                <div class="button-container">
+                    <button type="submit" class="px-6 py-4 text-lg font-semibold bg-teal-500 text-white rounded-r-lg hover:bg-teal-700">Search</button>
+                </div>
+            </form>
+        </div>
 
-    <h2>Welcome to My Website</h2>
-    <p>This is the homepage.</p>
 
-    
 {% endblock %}

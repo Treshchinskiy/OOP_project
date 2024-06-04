@@ -2,6 +2,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from sqlalchemy import CheckConstraint
+from sqlalchemy.dialects.mysql import LONGBLOB
+
 
 app = Flask(__name__)
 
@@ -18,21 +20,6 @@ class User(db.Model,UserMixin):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
 
-
-
-class Comment(db.Model):
-    __tablename__='comment'
-    id=db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    text = db.Column(db.Text, nullable=False)
-    date = db.Column(db.DateTime, nullable=False)
-    stars = db.Column(db.Integer)
-    movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'))
-    
-    __table_args__ = (
-        CheckConstraint('stars >= 1 AND stars <= 5', name='stars_range'),
-    )
- 
 
 
 class Movies(db.Model):
@@ -52,6 +39,45 @@ class Movies(db.Model):
         return f'<Movie {self.title}>'
     
 
+class Comment(db.Model):
+    __tablename__='comment'
+    id=db.Column(db.Integer, primary_key=True)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    text = db.Column(db.Text, nullable=False)
+    date = db.Column(db.DateTime, nullable=False)
+    stars = db.Column(db.Integer)
+    
+    
+    
+    __table_args__ = (
+        CheckConstraint('stars >= 1 AND stars <= 5', name='stars_range'),
+    )
+ 
 
 
 
+
+
+
+
+class RecommendationSystem():
+    @staticmethod
+    def recommend():
+        pass
+
+
+
+class AnalyzeComment():
+    @staticmethod
+    def analyze():
+        pass
+    
+
+
+class PreferenceUpdater():
+    pass
+    
+    
+    
+    
